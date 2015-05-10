@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.udellent.layoutwatchface"
+        minSdkVersion 18
+        targetSdkVersion 22
+        versionCode 10000
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    project.ext.set("archivesBaseName", defaultConfig.applicationId + "_" +
+            defaultConfig.versionName.replace(" ", "_"));
+    applicationVariants.all { variant ->
+        appendVersionNameVersionCode(variant)
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    wearApp project(':wear')
+}
+
+def appendVersionNameVersionCode(variant) {
+    variant.outputs.each { output ->
+        if (output.zipAlign) {
+            def file = output.outputFile
+            def fileName = file.name.replace("-", "_").replace("_release.apk", ".apk")
+            output.outputFile = new File(file.parent, fileName)
+        }
+    }
+}

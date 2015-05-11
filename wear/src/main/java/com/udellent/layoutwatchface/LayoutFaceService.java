@@ -194,20 +194,17 @@ public class LayoutFaceService extends CanvasWatchFaceService {
 
             if (insets.isRound()) {
                 // Shrink the face to fit on a round screen
-                mXOffset = displaySize.x * 0.1f;
-                if (displaySize.y < displaySize.x) {
-                    mYOffset = 0;
-                    displaySize.y -= mXOffset;
-                } else {
-                    mYOffset = mXOffset;
-                    displaySize.y -= 2 * mXOffset;
-                }
+                mYOffset = mXOffset = displaySize.x * 0.1f;
+                displaySize.y -= 2 * mXOffset;
                 displaySize.x -= 2 * mXOffset;
+
+                // Recompute the MeasureSpec fields - these determine the actual size of the layout
+                specW = View.MeasureSpec.makeMeasureSpec(displaySize.x, View.MeasureSpec.EXACTLY);
+                specH = View.MeasureSpec.makeMeasureSpec(displaySize.y, View.MeasureSpec.EXACTLY);
+
             } else {
                 mXOffset = mYOffset = 0;
             }
-            specW = View.MeasureSpec.makeMeasureSpec(displaySize.x, View.MeasureSpec.EXACTLY);
-            specH = View.MeasureSpec.makeMeasureSpec(displaySize.y, View.MeasureSpec.EXACTLY);
         }
 
         @Override
